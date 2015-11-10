@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS question_follows;
+DROP TABLE IF EXISTS question_replies;
+DROP TABLE IF EXISTS question_likes;
 
 CREATE TABLE
   users(
@@ -31,7 +36,7 @@ CREATE TABLE
   );
 
 CREATE TABLE
-  replies(
+  question_replies(
     id INTEGER PRIMARY KEY,
     question_id INTEGER NOT NULL,
     parent_id INTEGER,
@@ -74,3 +79,8 @@ INSERT INTO
   ('Question 1', 'Why?', 1),
   ('Question 2', 'How?', 2),
   ('Question 3', 'What?', 3);
+
+INSERT INTO
+  question_replies(question_id, replier_id, body)
+  VALUES
+  (1, 1, "First!");

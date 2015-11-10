@@ -1,0 +1,6 @@
+require_relative 'query_objects/tableentry'
+require_relative 'query_objects/follow'
+require_relative 'query_objects/like'
+require_relative 'query_objects/question'
+require_relative 'query_objects/reply'
+require_relative 'query_objects/user'

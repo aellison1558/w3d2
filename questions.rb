@@ -1,3 +1,7 @@
+def reload
+  load __FILE__
+end
+
 require 'sqlite3'
 require 'singleton'
 class QuestionsDB < SQLite3::Database
@@ -26,6 +30,7 @@ class TableEntry
     WHERE
       id = ?
     SQL
+    return nil if options.first.nil?
     self.new(options.first)
   end
 
@@ -58,11 +63,14 @@ class User < TableEntry
         lname = ? AND fname = ?
     SQL
     raise 'No such person' if options.first.nil?
-    self.new(options.first)
+    options.map{|user| self.new(user)}
   end
 
-  def author_questions
+  def authored_questions
     Question.find_by_author_id(@id)
+  end
+  def authored_replies
+    Reply.find_by_user_id(@id)
   end
 end
 
@@ -85,6 +93,12 @@ class Question < TableEntry
     SQL
     options.map {|question| Question.new(question)}
   end
+  def author
+    User.find_by_id(@creator_id)
+  end
+  def replies
+    Reply.find_by_question_id(@id)
+  end
 end
 
 class Follow < TableEntry
@@ -104,7 +118,32 @@ class Reply < TableEntry
 
   def self.find_by_question_id(question_id)
     options = self.select_query_id('question_id', question_id)
-    Reply.new(options.first)
+    options.map {|question| Reply.new(question)}
+
+  end
+  def self.find_by_user_id replier_id
+    options = self.select_query_id('replier_id', replier_id)
+    options.map {|question| Reply.new(question)}
+  end
+  def author
+    User.find_by_id(@replier_id)
+  end
+  def question
+    Question.find_by_question_id(@question_id)
+  end
+  def parent_reply
+    Reply.find_by_id(@parent_id)
+  end
+  def child_replies
+    options = QuestionsDB.instance.execute(<<-SQL, @id)
+    SELECT
+      *
+    FROM
+      question_replies
+    WHERE
+      parent_id = ?
+    SQL
+    options.map {|reply| Reply.new(reply)}
   end
 end
 

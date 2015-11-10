@@ -81,6 +81,7 @@ INSERT INTO
   ('Question 3', 'What?', 3);
 
 INSERT INTO
-  question_replies(question_id, replier_id, body)
+  question_replies(question_id, parent_id, replier_id, body)
   VALUES
-  (1, 1, "First!");
+  (1, NULL, 1, "First!"),
+  (1, 1, 2, "SECOND");

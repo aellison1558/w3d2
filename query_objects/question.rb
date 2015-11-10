@@ -23,4 +23,8 @@ class Question < TableEntry
   def replies
     Reply.find_by_question_id(@id)
   end
+
+  def followers
+    Follow.followers_for_question_id(@id)
+  end
 end

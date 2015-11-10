@@ -85,3 +85,10 @@ INSERT INTO
   VALUES
   (1, NULL, 1, "First!"),
   (1, 1, 2, "SECOND");
+
+INSERT INTO
+  question_follows(question_id, follower_id)
+  VALUES
+  (1, 2),
+  (1, 3),
+  (2, 1);

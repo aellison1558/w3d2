@@ -1,4 +1,4 @@
-require_relative 'questions'
+require_relative 'questionsdb'
 
-p User.find_by_id(1)
-p Question.find_by_id(1)
+user = User.new({'fname' => 'David', 'lname' => 'Duchovny'})
+user.save

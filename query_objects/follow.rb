@@ -26,6 +26,20 @@ class Follow < TableEntry
         follower_id = ?
       SQL
       options.map {|hash| Question.find_by_id(hash['question_id'])}
-
+  end
+  def self.most_followed_questions(n)
+    options = QuestionsDB.instance.execute(<<-SQL, n)
+      SELECT
+        question_id
+      FROM
+        question_follows
+      GROUP BY
+        question_id
+      ORDER BY
+        COUNT(*) DESC
+      LIMIT
+        ?
+    SQL
+    options.map {|hash| Question.find_by_id(hash['question_id'])}
   end
 end

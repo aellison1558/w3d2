@@ -7,6 +7,23 @@ class TableEntry
     'Reply' => 'question_replies'
   }
   attr_accessor :id
+  def save()
+    raise 'ID already exists' if self.id
+    attributes = self.instance_variables[1..-1]
+    attr_names = attributes.map {|a| a.to_s[1..-1]}.join(", ")
+    attr_values = attributes.map {|name| self.send(name.to_s[1..-1])}
+    attr_values = attr_values.map do |val|
+       val.is_a?(String) ? val = "'#{val}'" : val
+    end.join(", ")
+    p attr_names, attr_values, self.class::TABLENAMES[self.to_s]
+    gets
+
+    options = QuestionsDB.instance.execute(<<-SQL)
+    INSERT INTO users(#{attr_names})
+    VALUES(#{attr_values})
+    SQL
+    self.id = QuestionsDB.instance.last_insert_row_id
+  end
   def self.find_by_id id
     options = QuestionsDB.instance.execute(<<-SQL, id)
     SELECT

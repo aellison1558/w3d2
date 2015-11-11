@@ -77,8 +77,8 @@ INSERT INTO
   questions(title, body, creator_id)
   VALUES
   ('Question 1', 'Why?', 1),
-  ('Question 2', 'How?', 2),
-  ('Question 3', 'What?', 3);
+  ('Question 2', 'How?', 1),
+  ('Question 3', 'What?', 1);
 
 INSERT INTO
   question_replies(question_id, parent_id, replier_id, body)
@@ -88,6 +88,13 @@ INSERT INTO
 
 INSERT INTO
   question_follows(question_id, follower_id)
+  VALUES
+  (1, 2),
+  (1, 3),
+  (2, 1);
+
+INSERT INTO
+  question_likes(question_id, liker_id)
   VALUES
   (1, 2),
   (1, 3),
